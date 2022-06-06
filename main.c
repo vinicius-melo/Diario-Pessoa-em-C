@@ -46,25 +46,57 @@ int adicionar(int id, int dia, int mes, int ano, int h, int min, char *nome, cha
 }
 
 // data, horário, nome, local, duração e observação.
-void pesquisar(char *nome)
-{
+void pesquisar_id(int id)
+{	
+int registrado_id = 0;
     struct Diario *temp = head;
     while (temp != NULL)
     {
-        if (temp->nome == nome)
+        if (temp->id ==  id)
         {
-            printf("ID: %d\n", temp->id);
+        	registrado_id = 1;
+         	printf("Registro encontrado \n\n");
+		    printf("ID: %d\n", temp->id);
             printf("Data: %d/%d/%d\n", temp->dia, temp->mes, temp->ano);
             printf("Horario: %d:%d\n", temp->h, temp->min);
             printf("Nome: %s\n", temp->nome);
             printf("Local: %s\n", temp->local);
             printf("Duracacao: %s\n", temp->duracao);
             printf("Obervacao: %s\n", temp->observacao);
-            return;
-        }
-        temp = temp->next;
+            printf("\n---------------------------\n");
+        }else if(registrado_id == 0)
+		{
+    		printf("Nao foi encontrado nenhum registro com o ID %d", id);
+		}
+		temp = temp->next;
     }
-    printf("Nao foi encontrado nenhum registro com o nome %s", nome);
+}
+
+
+void pesquisar(char *nome)
+{
+	int registrado = 0;
+    struct Diario *temp = head;
+    while (temp != NULL)
+    {
+        if (strcmp(temp->nome,  nome) == 0)
+        {
+        	registrado = 1;
+            printf("Registro encontrado \n\n");
+			printf("ID: %d\n", temp->id);
+            printf("Data: %d/%d/%d\n", temp->dia, temp->mes, temp->ano);
+            printf("Horario: %d:%d\n", temp->h, temp->min);
+            printf("Nome: %s\n", temp->nome);
+            printf("Local: %s\n", temp->local);
+            printf("Duracacao: %s\n", temp->duracao);
+            printf("Obervacao: %s\n", temp->observacao);
+            printf("\n---------------------------\n");
+        }else if(registrado == 0)
+		{
+    		printf("Nao foi encontrado nenhum registro com o nome %s", nome);
+		}
+		temp = temp->next;
+    }
 }
 
 void atualizar(int id)
@@ -80,17 +112,27 @@ void atualizar(int id)
             printf("id %d encontrado !!!\n", id);
             printf("Entre com a nova data(dd mm aaaa): ");
             scanf("%d,%d,%d", temp->dia, temp->mes, temp->ano);
+            
+            
             printf("Entre com novo horario(hh mm): ");
             scanf("%d, %d", temp->h, temp->min);
+			getchar();
 
             printf("Entre com o novo nome: ");
             scanf("%s", temp->nome);
+            getchar();
+            
             printf("Entre com o novo local: ");
             scanf("%s", temp->local);
+            getchar();
+            
             printf("Entre com a nova duracao: ");
             scanf("%s", temp->duracao);
+            getchar();
+            
             printf("Entre com novas observacoes ");
             scanf("%s", temp->observacao);
+            getchar();
 
             printf("ATUALIZACAO FEITA COM SUCESSO!!!\n");
             return;
@@ -160,10 +202,11 @@ void main()
     char nova_senha[6];
     char confirmar_senha[6];
 
-    int tentativas = 0;
-    int op;
+	int tentativas = 0;
+    int op = 1;
     int id = 0;
-    int i;
+    int i, escolha_pesquisa, id_pesquisa = 0;
+    
     int dia, mes, ano;
     int h, min;
     char nome[25];
@@ -182,7 +225,10 @@ void main()
 
             printf("\nEscolha: ");
             scanf("%d", &op);
+            getchar();
             printf("\n\n");
+            
+            
             switch (op)
             {
             case 0:
@@ -219,19 +265,43 @@ void main()
                 break;
 
             case 2:
-                printf("Insira o nome para pegar pesquisar: ");
-                scanf("%25[^\n]", nome);
-                pesquisar(nome);
+            	printf("Escola o modo de pesquisa \n[0] ID\n[1] NOME");
+            	printf("\nEscolha: ");
+				scanf("%d", &escolha_pesquisa);
+				getchar();
+				
+				switch(escolha_pesquisa)
+				{
+					case 0:
+						printf("Insira o ID para ser pesquisado: ");
+						scanf("%d", &id_pesquisa);
+						getchar();
+            			printf("\n\n");
+            			pesquisar_id(id_pesquisa);
+					break;
+					case 1:
+						printf("Insira o nome para ser pesquisado: ");
+                		scanf("%25[^\n]", nome);
+               		    getchar();
+           				printf("\n\n");
+                		pesquisar(nome);
+					break;
+					default:
+					printf("Opcao invalida");
+					break;
+				}
+                
                 break;
             case 3:
+            	printf("Entre com o id para atualizar o registro: ");
+                scanf("%d", &id);
+                atualizar(id);
+                break;
+                
+            case 4:
                 printf("Entre com o id para deletar o registro: ");
                 scanf("%d", &id);
                 deletar(id);
-                break;
-            case 4:
-                printf("Entre com o id para atualizar o registro: ");
-                scanf("%d", &id);
-                atualizar(id);
                 break;
 
             case 5:
