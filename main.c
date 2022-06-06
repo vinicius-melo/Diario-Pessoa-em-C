@@ -156,17 +156,16 @@ void main()
 {
     head = NULL;
 
-    char psw[] = {"123456"};
-    char cpsw[6];
-    char npsw[6];
+    char senha[] = "123456";
+    char nova_senha[6];
+    char confirmar_senha[6];
 
     int tentativas = 0;
     int op;
     int id = 0;
-
+    int i;
     int dia, mes, ano;
     int h, min;
-    char horario[5];
     char nome[25];
     char local[25];
     char duracao[25];
@@ -177,8 +176,7 @@ void main()
     printf("****************************************\n");
     do
     {
-
-        if (strcmp(cpsw, psw) == 0)
+        if (strcmp(confirmar_senha, senha) == 0)
         {
             printf("\n \n \n[1] Adicionar novo registro\n[2] Pesquisar registros\n[3] Editar registro:\n[4] Remover registro\n[5] Listar todos os registros\n[0] Encerrar Programa");
 
@@ -217,11 +215,12 @@ void main()
 
                 printf("\t -------------------------- \n");
                 id += adicionar(id, dia, mes, ano, h, min, nome, local, duracao, observacao);
+                strcpy(confirmar_senha, nova_senha);
                 break;
 
             case 2:
                 printf("Insira o nome para pegar pesquisar: ");
-                scanf("%s", &nome);
+                scanf("%25[^\n]", nome);
                 pesquisar(nome);
                 break;
             case 3:
@@ -242,15 +241,15 @@ void main()
                 printf("Escolha uma opção valida");
                 break;
             }
-            strcpy(cpsw, "123456");
-        }
-        else if (tentativas >= 2)
+            strcpy(confirmar_senha, senha);
+        }else
+        if (tentativas >= 2)
         {
             printf("Tentatativas de login excedida. \n");
             printf("Por gentileza cadastre uma nova senha: ");
-            scanf("%6[^\n]", npsw);
+            scanf("%6[^\n]", nova_senha);
             getchar();
-            strcpy(psw, npsw);
+            strcpy(senha, nova_senha);
 
             tentativas = 0;
 
@@ -259,7 +258,7 @@ void main()
         else
         {
             printf("Insira a senha do diario: \n");
-            scanf("%6[^\n]", cpsw);
+            scanf("%6[^\n]", confirmar_senha);
             getchar();
 
             tentativas += tentativas + 1;
